@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article>
+  <front>
+    <journal-meta><journal-title-group><journal-title>Journal of Test Oncology</journal-title></journal-title-group></journal-meta>
+    <article-meta>
+      <article-id pub-id-type="pmcid">PMC1234567</article-id>
+      <article-id pub-id-type="doi">10.1000/JTO.2020.42</article-id>
+      <article-id pub-id-type="pmid">31234567</article-id>
+      <title-group><article-title>MicroRNA-99 suppresses <italic>tumour</italic> growth in a test carcinoma</article-title></title-group>
+      <pub-date><year>2020</year></pub-date>
+      <abstract><p>We show that microRNA-99 suppresses proliferation of test carcinoma cells in vitro and in vivo.</p></abstract>
+      <abstract abstract-type="graphical"><p>Graphical abstract text that should be ignored entirely here.</p></abstract>
+    </article-meta>
+  </front>
+  <body>
+    <sec><title>Introduction</title>
+      <p>MicroRNAs regulate gene expression after transcription and are often altered in cancer <xref ref-type="bibr" rid="R1">[1]</xref>, <xref ref-type="bibr" rid="R2 R3">[2,3]</xref>.</p>
+      <p>Short.</p>
+    </sec>
+    <sec><title>Results</title>
+      <sec><title>miR-99 inhibits proliferation</title>
+        <p>Overexpression of miR-99 reduced colony formation by sixty percent compared with controls <xref ref-type="bibr" rid="R2">[2]</xref>.<table-wrap><table><tr><td>TABLE CELL TEXT SHOULD VANISH</td></tr></table></table-wrap></p>
+      </sec>
+    </sec>
+    <sec><title>Acknowledgments</title><p>We thank the funding agency for its generous support of this work over many years.</p></sec>
+  </body>
+  <back>
+    <ref-list>
+      <ref id="R1"><element-citation><article-title>A review of microRNAs</article-title><pub-id pub-id-type="doi">10.1000/REVIEW.1</pub-id><pub-id pub-id-type="pmid">111</pub-id></element-citation></ref>
+      <ref id="R2"><element-citation><article-title>A retracted mechanism paper</article-title><pub-id pub-id-type="doi">https://doi.org/10.1000/retracted.2</pub-id></element-citation></ref>
+      <ref id="R3"><mixed-citation>A book chapter without identifiers.</mixed-citation></ref>
+    </ref-list>
+  </back>
+</article>

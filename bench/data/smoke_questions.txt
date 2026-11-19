@@ -1,0 +1,32 @@
+# Phase 2 smoke set: 30 questions about non-coding RNAs in cancer.
+# One question per line; lines starting with # are ignored.
+What role does miR-21 play in tumour cell proliferation and apoptosis?
+How does the lncRNA MALAT1 contribute to cancer metastasis?
+Does HOTAIR promote epithelial-mesenchymal transition, and through which mechanism?
+What is known about the let-7 family as tumour suppressors?
+How do circular RNAs act as microRNA sponges in gastric cancer?
+Does circHIPK3 promote colorectal cancer growth and metastasis?
+Which microRNAs are proposed as diagnostic biomarkers in serum for hepatocellular carcinoma?
+What is the role of the lncRNA H19 in cancer drug resistance?
+How do exosomal microRNAs mediate communication between tumour cells and their microenvironment?
+Which microRNAs regulate PTEN expression in cancer?
+What is the function of the miR-200 family in epithelial-mesenchymal transition?
+How does lncRNA PVT1 interact with MYC in cancer?
+Are circulating microRNAs useful for early detection of lung cancer?
+How does miR-34a connect to the p53 pathway?
+What mechanisms link lncRNA XIST to tumour progression?
+Which non-coding RNAs are associated with cisplatin resistance in ovarian cancer?
+How does m6A RNA methylation affect non-coding RNA function in cancer?
+What is the role of miR-155 in lymphoma and immune regulation?
+Can microRNA-based therapeutics be delivered effectively to tumours in vivo?
+How does lncRNA NEAT1 influence cancer cell survival?
+Which circular RNAs are implicated in hepatocellular carcinoma progression?
+What evidence links miR-145 to suppression of cancer stem cell properties?
+How do competing endogenous RNA networks regulate oncogenes in breast cancer?
+What is the role of lncRNA ANRIL in cancer through PRC2 recruitment?
+Which microRNAs target the Wnt/beta-catenin pathway in colorectal cancer?
+How does lncRNA TUG1 affect proliferation in glioma?
+What role do microRNAs play in resistance to EGFR inhibitors in lung cancer?
+Is miR-375 a tumour suppressor or an oncogene?
+How does circRNA CDR1as (ciRS-7) regulate miR-7 in cancer?
+What are the limitations of using cell-line studies to establish lncRNA function in cancer?

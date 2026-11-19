@@ -7,9 +7,13 @@ import json
 import sys
 from dataclasses import asdict
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from .integrity import NoticeStore, default_db_path, open_checker, sync
 from .integrity.models import CheckResult
+
+if TYPE_CHECKING:
+    from .pipeline import RagResult
 
 
 def _result_json(result: CheckResult) -> dict:
@@ -42,6 +46,29 @@ def _print_result(result: CheckResult) -> None:
         print(f"warning:    could not reach {err}", file=sys.stderr)
 
 
+def _print_rag(result: RagResult) -> None:
+    from .generate.answer import citation_problems, source_for
+
+    print(f"Retrieved {len(result.retrieved)} passages:")
+    for i, r in enumerate(result.retrieved, 1):
+        score = f"{r.rerank_score:6.2f}" if r.rerank_score is not None else "     -"
+        print(f"  [{i}] {score}  {r.chunk.title[:90]}")
+        print(f"            {r.chunk.section[:60]} | {source_for(r)}")
+    answer = result.answer
+    if answer is None:
+        return
+    print()
+    if answer.refused:
+        print("Claude declined to answer this question.")
+        return
+    for seg in answer.segments:
+        marks = sorted({c.result_index + 1 for c in seg.citations})
+        print(seg.text + ("".join(f"[{m}]" for m in marks) if marks else ""), end="")
+    print(f"\n\n(model {answer.model}, {answer.input_tokens} in / {answer.output_tokens} out tokens)")
+    for problem in citation_problems(answer, result.retrieved):
+        print(f"citation problem: {problem}", file=sys.stderr)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="tainttrace")
     parser.add_argument("--db", type=Path, default=None, help="store path")
@@ -60,6 +87,20 @@ def main(argv: list[str] | None = None) -> int:
 
     sub.add_parser("info", help="show store metadata")
 
+    p_corpus = sub.add_parser("corpus", help="build or inspect the paper corpus")
+    corpus_sub = p_corpus.add_subparsers(dest="corpus_cmd", required=True)
+    p_build = corpus_sub.add_parser("build", help="download and index papers")
+    p_build.add_argument("--topic", default="mirna-cancer")
+    p_build.add_argument("--n-topic", type=int, default=2000)
+    p_build.add_argument("--n-retracted", type=int, default=500)
+    corpus_sub.add_parser("embed", help="compute dense embeddings for all chunks")
+    corpus_sub.add_parser("stats", help="show corpus counts")
+
+    p_ask = sub.add_parser("ask", help="answer a question from the corpus")
+    p_ask.add_argument("question")
+    p_ask.add_argument("-k", type=int, default=8, help="passages to retrieve")
+    p_ask.add_argument("--retrieve-only", action="store_true", help="skip answer generation")
+
     args = parser.parse_args(argv)
 
     if args.cmd == "sync":
@@ -72,6 +113,11 @@ def main(argv: list[str] | None = None) -> int:
             print(f"{key}: {value}")
         return 0
 
+    if args.cmd == "corpus":
+        return _corpus(args)
+    if args.cmd == "ask":
+        return _ask(args)
+
     checker = open_checker(args.db, remote=not args.offline)
     try:
         result = checker.check(doi=args.doi, pmid=args.pmid, title=args.title)
@@ -81,6 +127,44 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(_result_json(result), indent=2))
     else:
         _print_result(result)
+    return 0
+
+
+def _corpus(args: argparse.Namespace) -> int:
+    import logging
+
+    from .corpus.store import CorpusStore, default_corpus_dir
+
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+    if args.corpus_cmd == "build":
+        from .corpus.build import BuildPlan, build_corpus
+
+        plan = BuildPlan(topic=args.topic, n_topic=args.n_topic, n_retracted=args.n_retracted)
+        print(json.dumps(build_corpus(plan), indent=2))
+    elif args.corpus_cmd == "embed":
+        from .retrieval.dense import DEFAULT_EMBED_MODEL, DenseIndex, FastEmbedder
+
+        index = DenseIndex.build(CorpusStore(), FastEmbedder(batch_size=128), DEFAULT_EMBED_MODEL)
+        index.save(default_corpus_dir() / "dense.npz")
+        print(f"Embedded {len(index.ids)} chunks")
+    else:
+        print(json.dumps(CorpusStore().stats(), indent=2))
+    return 0
+
+
+def _ask(args: argparse.Namespace) -> int:
+    from .generate.answer import AnswerGenerator, has_claude_credentials
+    from .pipeline import RagPipeline, load_retriever
+
+    generator = None
+    if not args.retrieve_only:
+        if not has_claude_credentials():
+            print("No Claude credentials found (set ANTHROPIC_API_KEY); showing retrieval only.\n",
+                  file=sys.stderr)
+        else:
+            generator = AnswerGenerator()
+    _print_rag(RagPipeline(load_retriever(), generator).ask(args.question, args.k))
     return 0
 
 
