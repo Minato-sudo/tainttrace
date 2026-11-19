@@ -3,6 +3,7 @@ name = "tainttrace"
 version = "0.1.0"
 description = "Retraction-aware retrieval for scientific question answering"
 readme = "README.md"
+license = "MIT"
 authors = [
     { name = "Minato-sudo", email = "i232548@isb.nu.edu.pk" }
 ]

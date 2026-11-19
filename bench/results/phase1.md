@@ -40,10 +40,11 @@ Offline. **Found 50/50 (100%).** Titles were given a random perturbation: a `RET
 
 For each sampled retracted paper, the closest OpenAlex title match with a different DOI that OpenAlex does not mark retracted. Checked by title only, offline.
 
-- 50/50 OpenAlex searches failed after retries and were skipped.
-- 0 of those matches were retraction notices ("Retracted: ..."), which OpenAlex indexes as separate works. Matching a notice to its paper is correct, so they are excluded.
-- **Flagged: 0/0 remaining look-alikes.** Each is a same-title paper with a different DOI: an accidental duplicate, a reissued version, or a correction that reuses the title. Title-only matches are therefore reported with `certain = False`; a DOI lookup never confuses them.
+- 0/50 OpenAlex searches failed after retries and were skipped.
+- 38 of those matches were retraction notices ("Retracted: ..."), which OpenAlex indexes as separate works. Matching a notice to its paper is correct, so they are excluded.
+- **Flagged: 1/11 remaining look-alikes.** Each is a same-title paper with a different DOI: an accidental duplicate, a reissued version, or a correction that reuses the title. Title-only matches are therefore reported with `certain = False`; a DOI lookup never confuses them.
 
+  - `Bangladesh’s food for education program: the effects on two groups of targeted households` (10.1080/09645292.2010.521659) matched `Bangladesh's food for education program: the effects on two groups of targeted households` (score 100)
 
 ## 4. Recent publisher retractions missing from the local file
 
